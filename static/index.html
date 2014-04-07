@@ -8,14 +8,41 @@
     <link rel="stylesheet" href="css/screen.css">
   </head>
 <body ng-app="flaskenberg">
+<div class="container">
 
-  <h1>Flaskenberg App</h1>
-  <h4>Users</h4>
-  <h4>Tasks</h4>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Flaskenberg App</h1>
+    </div>
+  </div>
+
+  <div ng-controller="UsersCtrl">
+    <h4>Users</h4>
+      <ul>
+        <li ng-repeat="user in users">
+          {{user.hash_id}}
+          <p>{{user.gender}}</p>
+          <p>{{user.age}}</p>
+        </li>
+      </ul>
+  </div>
+  
+  <div ng-controller="TasksCtrl">
+    <h4>Tasks</h4>
+      <ul>
+        <li ng-repeat="task in tasks">
+          {{task.hash_id}}
+        </li>
+      </ul>
+  </div>
 
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/controllers/flaskenbergCtrl.js"></script>
+</div>
 </body>
 </html>
