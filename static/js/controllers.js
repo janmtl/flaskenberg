@@ -18,11 +18,6 @@ flaskenbergControllers.controller('QuestionsCtrl', ['$scope', 'Question',
     $scope.questions = Question.query();
   }]);
 
-flaskenbergControllers.controller('ChoicesCtrl', ['$scope', 'Choice',
-  function($scope, Choice) {
-    $scope.choices = Choice.query();
-  }]);
-
 flaskenbergControllers.controller('AnswersCtrl', ['$scope', 'Answer',
   function($scope, Answer) {
     $scope.answers = Answer.query();
