@@ -1,6 +1,6 @@
 venv
 db
-static/bower_components
+flaskenberg/static/bower_components
 *.sublime-project
 *.sublime-workspace
 *.log
