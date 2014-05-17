@@ -5,4 +5,5 @@ Roadmap
 -- On user.create, make a private key and public key
 -- The hash at the reward screen is your answers encrypted with the public key (which is available to Angular)
 -- You send the hash result to your TA
+- Need to set which user you are server-side
 - Need to be able to restore user sessions via user hash
