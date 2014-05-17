@@ -1,4 +1,6 @@
 from flaskenberg import app, db
+from flaskenberg.models import User, Task, Question, Choice, Answer
+import flask.ext.sqlalchemy
 
 # Create the database tables.
 db.create_all()

@@ -1,6 +1,8 @@
 venv
 db
 flaskenberg/static/bower_components
+flaskenberg.egg-info
+*.pyc
 *.sublime-project
 *.sublime-workspace
 *.log

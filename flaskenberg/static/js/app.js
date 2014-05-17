@@ -8,4 +8,16 @@ var flaskenberg = angular.module('flaskenberg', [
 
   'flaskenbergControllers',
   'flaskenbergServices'
-]);
+]).config(['$routeProvider', function ($routeProvider){
+  $routeProvider
+    .when('/summary', {
+        templateUrl: 'templates/summary.html'
+    })
+    .when('/survey', {
+        templateUrl: 'templates/survey.html',
+        controller: 'SurveyCtrl'
+    })
+    .otherwise({
+      redirectTo: '/survey'
+    });
+}]);
