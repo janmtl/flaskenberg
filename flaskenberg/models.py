@@ -18,6 +18,7 @@ class User(db.Model):
   hash_id     = db.Column(db.Unicode, unique=True)
   gender      = db.Column(db.Unicode)
   age         = db.Column(db.Integer)
+  tasks       = db.relationship('Task', secondary=users_tasks)
   count       = db.Column(db.Integer)
 
 class Task(db.Model):
@@ -25,8 +26,7 @@ class Task(db.Model):
   hash_id     = db.Column(db.Unicode, unique=True)
   title       = db.Column(db.Unicode)
   content     = db.Column(db.Unicode)
-  complete    = db.Column(db.Boolean)
-  users       = db.relationship('User', secondary=users_tasks, backref=db.backref('tasks', lazy='dynamic'))
+  count       = db.Column(db.Integer)
   questions   = db.relationship('Question', secondary=questions_tasks)
 
 class Question(db.Model):

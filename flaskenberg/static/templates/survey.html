@@ -5,7 +5,7 @@
         <th>Hash ID</th>
         <th>Title</th>
         <th>Content</th>
-        <th>Complete(?)</th>
+        <th>Count</th>
         <th>Questions</th>
       </tr>
       <tbody>
@@ -13,14 +13,19 @@
           <td>{{task.hash_id}}</td>
           <td>{{task.title}}</td>
           <td>{{task.content}}</td>
-          <td>{{task.complete}}</td>
+          <td>{{task.count}}</td>
           <td>
             <ul>
               <li ng-repeat="question in task.questions">
                 <strong>{{question.title}}</strong>
-                <ul>
-                  <li ng-repeat="choice in question.choices"> {{choice.content}}
-                </ul>
+                <form name="{{question.id}}" ng-controller="AnswersCtrl" ng-dirty>
+                  <input type="hidden" name="question_id" value="{{question.id}}">
+                  <input type="hidden" name="task_id" value="{{task.id}}">
+                  <input type="hidden" name="user_id" value="{{user.id}}">
+                  <ul>
+                    <li ng-repeat="choice in $parent.question.choices"><input type="radio" ng-model="answer.value" value="{{choice.value}}" name="$parent.question.id"> {{choice.content}}
+                  </ul>
+                </form>
               </li>
             </ul>
           </td>

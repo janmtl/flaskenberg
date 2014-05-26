@@ -26,6 +26,7 @@ flaskenbergControllers.controller('AnswersCtrl', ['$scope', 'Answer',
 flaskenbergControllers.controller('SurveyCtrl', ['$scope', 'User', 'Task', 'Question', 'Answer',
   function($scope, User, Task, Question, Answer) {
     User.get({userId: 1}, function(res){
+      $scope.user_id = res.id;
       $scope.tasks =  res.tasks;
       angular.forEach($scope.tasks, function(task, task_index){
         Task.get({taskId: task.id}, function(res){
