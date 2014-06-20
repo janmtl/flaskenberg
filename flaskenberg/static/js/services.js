@@ -24,6 +24,9 @@ flaskenbergServices.factory('Task', ['$resource', function ($resource){
         'query': {
           isArray: true,
           transformResponse: function (data){ return angular.fromJson(data)["objects"]; }
+        },
+        next: {
+          method: 'GET'
         }
       }
     );

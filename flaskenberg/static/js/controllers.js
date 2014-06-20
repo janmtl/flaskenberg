@@ -25,6 +25,9 @@ flaskenbergControllers.controller('AnswersCtrl', ['$scope', 'Answer',
 
 flaskenbergControllers.controller('SurveyCtrl', ['$scope', 'User', 'Task', 'Question', 'Answer',
   function($scope, User, Task, Question, Answer) {
+    Task.next({taskId: 1}, function(res){
+      console.log(res);
+    });
     User.get({userId: 1}, function(res){
       $scope.user_id = res.id;
       $scope.tasks =  res.tasks;
