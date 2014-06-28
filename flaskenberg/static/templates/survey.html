@@ -1,20 +1,11 @@
+<p>Read the text below in <emph>full</emph> before answering the questions</p>
 <div ng-repeat="task in tasks">
-  <p>Read the text below in <emph>full</emph> before answering the questions</p>
   <pre><strong>{{task.title}}</strong><br>{{task.content}}</pre>
   <div ng-repeat="question in task.questions">
     <h4>{{question.title}}</h4>
-      <form name="{{question.id}}" ng-controller="AnswersCtrl" ng-dirty>
-        <input type="hidden" name="question_id" value="{{question.id}}">
-        <input type="hidden" name="task_id" value="{{task.id}}">
-        <input type="hidden" name="user_id" value="{{user.id}}">
-        <ul>
-          <li ng-repeat="choice in $parent.question.choices"><input type="radio" ng-model="answer.value" value="{{choice.value}}" name="$parent.question.id"> {{choice.content}}
-        </ul>
-      </form>
+      <div ng-repeat="choice in question.choices">
+        <button type="button" class="btn btn-default" ng-click="submit({task_id: task.id, question_id: question.id, value: choice.value});">{{$index+1}}</button>
+        {{choice.content}}
+      </div>
   </div>
-
-  <div class="btn-group-vertical">
-    <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">Left</label>
-  </div>
-
 </div>
