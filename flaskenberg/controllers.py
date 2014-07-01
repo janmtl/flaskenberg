@@ -1,6 +1,7 @@
 from flaskenberg import app, db
 from flaskenberg.models import User, Task, Question, Choice, Answer
 import flask.ext.sqlalchemy
+from flask import jsonify
 
 # Create the database tables.
 db.create_all()
@@ -18,6 +19,11 @@ manager.create_api(Answer,   methods=['GET', 'POST', 'PATCH'], include_columns=[
 @app.route('/')
 def root():
   return app.send_static_file('index.html')
+
+@app.route('/api/user/<int:user_id>/next')
+def next_task(user_id):
+  user = User.query.filter_by(id=user_id).first()
+  return jsonify(task_id = user.tasks[user.count].id)
 
 #@app.route('/<path:filename>')
 #def statics(filename):

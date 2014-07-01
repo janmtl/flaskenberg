@@ -4,8 +4,9 @@
   <div ng-repeat="question in task.questions">
     <h4>{{question.title}}</h4>
       <div ng-repeat="choice in question.choices">
-        <button type="button" class="btn btn-default" ng-click="submit({task_id: task.id, question_id: question.id, value: choice.value});">{{$index+1}}</button>
-        {{choice.content}}
+        <input type="radio" ng-model="answer" ng-value="{task_id: task.id, question_id: question.id, value: choice.value}">
+        <span class="choicenumber">{{$index+1}}</span>
+        <span class="choicecontent">{{choice.content}}</span>
       </div>
   </div>
 </div>
