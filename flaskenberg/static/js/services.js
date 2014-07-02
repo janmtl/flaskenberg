@@ -11,6 +11,11 @@ flaskenbergServices.factory('User', ['$resource', function ($resource){
         'query': {
           isArray: true,
           transformResponse: function (data){ return angular.fromJson(data)["objects"]; }
+        },
+        'next': {
+          method: 'GET',
+          isArray: false,
+          url: 'api/user/:userId/next'
         }
       }
     );
@@ -50,6 +55,9 @@ flaskenbergServices.factory('Answer', ['$resource', function ($resource){
         'query': {
           isArray: true,
           transformResponse: function (data){ return angular.fromJson(data)["objects"]; }
+        },
+        'save':{
+          method: 'PUT'
         }
       }
     );

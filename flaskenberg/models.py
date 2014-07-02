@@ -1,13 +1,6 @@
 from flaskenberg import app, db
+from sqlalchemy.ext.associationproxy import association_proxy
 
-users_tasks = db.Table('users_tasks',
-  db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-  db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
-)
-questions_tasks = db.Table('questions_tasks',
-  db.Column('question_id', db.Integer, db.ForeignKey('question.id')),
-  db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
-)
 questions_choices = db.Table('questions_choices',
   db.Column('question_id', db.Integer, db.ForeignKey('question.id')),
   db.Column('choice_id', db.Integer, db.ForeignKey('choice.id'))
@@ -18,7 +11,7 @@ class User(db.Model):
   hash_id     = db.Column(db.Unicode, unique=True)
   gender      = db.Column(db.Unicode)
   age         = db.Column(db.Integer)
-  tasks       = db.relationship('Task', secondary=users_tasks)
+  tasks       = association_proxy('answer', 'task')
   count       = db.Column(db.Integer)
 
 class Task(db.Model):
@@ -27,7 +20,7 @@ class Task(db.Model):
   title       = db.Column(db.Unicode)
   content     = db.Column(db.Unicode)
   count       = db.Column(db.Integer)
-  questions   = db.relationship('Question', secondary=questions_tasks)
+  questions   = association_proxy('answer', 'question')
 
 class Question(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -41,9 +34,12 @@ class Choice(db.Model):
 
 class Answer(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  user_id     = db.Column(db.Integer)
-  task_id     = db.Column(db.Integer)
-  question_id = db.Column(db.Integer)
+  user_id     = db.Column(db.Integer, db.ForeignKey('user.id'))
+  task_id     = db.Column(db.Integer, db.ForeignKey('task.id'))
+  question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
   value       = db.Column(db.Unicode)
-  timestamp   = db.Column(db.DateTime)
+  timestamp   = db.Column(db.Unicode)
   ip_address  = db.Column(db.Unicode)
+  user        = db.relationship(User, backref='answer')
+  task        = db.relationship(Task, backref='answer')
+  question    = db.relationship(Question, backref='answer')

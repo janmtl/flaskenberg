@@ -1,12 +1,10 @@
 <p>Read the text below in <emph>full</emph> before answering the questions</p>
-<div ng-repeat="task in tasks">
-  <pre><strong>{{task.title}}</strong><br>{{task.content}}</pre>
-  <div ng-repeat="question in task.questions">
-    <h4>{{question.title}}</h4>
-      <div ng-repeat="choice in question.choices">
-        <input type="radio" ng-model="answer" ng-value="{task_id: task.id, question_id: question.id, value: choice.value}">
-        <span class="choicenumber">{{$index+1}}</span>
-        <span class="choicecontent">{{choice.content}}</span>
-      </div>
-  </div>
-</div>
+<pre><strong>{{task.title}}</strong><br>{{task.content}}</pre>
+<h4>{{question.title}}</h4>
+  <form name="{{question.id}}">
+    <div ng-repeat="choice in question.choices">
+      <input type="radio" name="{{question.id}}" ng-model="answer.value" ng-value="choice.value" ng-change="submit();">
+      <span class="choicenumber">{{$index+1}}</span>
+      <span class="choicecontent">{{choice.content}}</span>
+    </div>
+  </form>
