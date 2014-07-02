@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="css/screen.css">
   </head>
 <body ng-app="flaskenberg">
-<div class="container">
 
-  <div class="row">
-    <div class="col-md-12">
-      <h1>Flaskenberg App</h1>
+  <nav class="navbar navbar-default" ng-controller="UserCtrl">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Flaskenberg App</a>
+      <p class="navbar-text navbar-right">User: <strong>{{user.hash_id}}</strong></p>
     </div>
-  </div>
+  </nav>
+
+<div class="container">
 
   <ng-view></ng-view>
 

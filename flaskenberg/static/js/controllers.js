@@ -23,3 +23,8 @@ flaskenbergControllers.controller('SurveyCtrl', ['$scope', 'User', 'Task', 'Ques
 
     init();
   }]);
+
+flaskenbergControllers.controller('UserCtrl', ['$scope', 'User',
+  function($scope, User) {
+    $scope.user = User.get({userId: 1});
+  }]);
