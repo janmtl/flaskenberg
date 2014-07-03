@@ -62,3 +62,16 @@ flaskenbergServices.factory('Answer', ['$resource', function ($resource){
       }
     );
   }]);
+
+flaskenbergServices.factory('Session', ['User', function(User){
+    var session = {user_id: null};
+
+    return {
+      get_user_id: function(){
+        return session.user_id;
+      },
+      set_user_id: function(user_id){
+        session.user_id = user_id;
+      }
+    }
+  }]);

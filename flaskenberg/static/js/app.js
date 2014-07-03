@@ -17,7 +17,11 @@ var flaskenberg = angular.module('flaskenberg', [
         templateUrl: 'templates/survey.html',
         controller: 'SurveyCtrl'
     })
+    .when('/register', {
+        templateUrl: 'templates/register.html',
+        controller: 'UserCtrl'
+    })
     .otherwise({
-      redirectTo: '/survey'
+      redirectTo: '/register'
     });
 }]);

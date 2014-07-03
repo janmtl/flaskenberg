@@ -1,11 +1,15 @@
 from flaskenberg import app, db
 from flaskenberg.models import User, Task, Question, Choice, Answer
 import flask.ext.sqlalchemy
-from sqlalchemy.sql import and_
+from sqlalchemy.sql import and_, func
+import hashlib, uuid
 from flask import jsonify
 
-def generate_hash(instance_id=None, data=None, **kw):
-  data.hash_id = '01x10'
+def new_user(instance_id=None, data=None, **kw):
+  next_id = db.session.query(func.max(User.id)).first()[0]
+  salt = uuid.uuid4().hex
+  data['hash_id'] = hashlib.sha1(str(next_id+1) + salt).hexdigest()
+  data['count'] = 0
   pass
 
 # Create the database tables.
@@ -15,7 +19,7 @@ db.create_all()
 manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
 
 # Create API endpoints, which will be available at /api/<tablename>
-manager.create_api(User,     methods=['GET', 'POST', 'PATCH'], include_columns=['id', 'hash_id', 'count'], preprocessors={'POST': [generate_hash]})
+manager.create_api(User,     methods=['GET', 'POST', 'PATCH'], include_columns=['id', 'hash_id', 'count'], preprocessors={'POST': [new_user]})
 manager.create_api(Task,     methods=['GET'], include_columns=['id', 'hash_id', 'title', 'content'])
 manager.create_api(Question, methods=['GET'], include_columns=['id', 'title', 'choices'])
 manager.create_api(Choice,   methods=['GET'])
