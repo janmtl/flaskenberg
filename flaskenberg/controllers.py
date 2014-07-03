@@ -4,6 +4,10 @@ import flask.ext.sqlalchemy
 from sqlalchemy.sql import and_
 from flask import jsonify
 
+def generate_hash(instance_id=None, data=None, **kw):
+  data.hash_id = '01x10'
+  pass
+
 # Create the database tables.
 db.create_all()
 
@@ -11,7 +15,7 @@ db.create_all()
 manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
 
 # Create API endpoints, which will be available at /api/<tablename>
-manager.create_api(User,     methods=['GET', 'POST', 'PATCH'], include_columns=['id', 'hash_id', 'count'])
+manager.create_api(User,     methods=['GET', 'POST', 'PATCH'], include_columns=['id', 'hash_id', 'count'], preprocessors={'POST': [generate_hash]})
 manager.create_api(Task,     methods=['GET'], include_columns=['id', 'hash_id', 'title', 'content'])
 manager.create_api(Question, methods=['GET'], include_columns=['id', 'title', 'choices'])
 manager.create_api(Choice,   methods=['GET'])
