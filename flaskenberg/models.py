@@ -12,15 +12,15 @@ class User(db.Model):
   gender      = db.Column(db.Unicode)
   age         = db.Column(db.Integer)
   tasks       = association_proxy('answer', 'task')
-  count       = db.Column(db.Integer)
+  tally       = db.Column(db.Integer)
 
 class Task(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   hash_id     = db.Column(db.Unicode, unique=True)
   title       = db.Column(db.Unicode)
   content     = db.Column(db.Unicode)
-  count       = db.Column(db.Integer)
-  questions   = association_proxy('answer', 'question')
+  tally       = db.Column(db.Integer)
+  questions   = association_proxy('survey', 'question')
 
 class Question(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -43,3 +43,10 @@ class Answer(db.Model):
   user        = db.relationship(User, backref='answer')
   task        = db.relationship(Task, backref='answer')
   question    = db.relationship(Question, backref='answer')
+
+class Survey(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  task_id     = db.Column(db.Integer, db.ForeignKey('task.id'))
+  question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+  task        = db.relationship(Task, backref='survey')
+  question    = db.relationship(Question, backref='survey')
