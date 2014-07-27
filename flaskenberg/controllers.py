@@ -19,7 +19,13 @@ def new_user(data=None, **kw):
 
 def assign_tasks(result=None, **kw):
   user_id = result['id']
-  tasks = Task.query.filter(Task.tally < app.config['TASK_COMPLETED_TALLY']).limit(app.config['TASKS_PER_USER'])
+  tasks = Task.query.\
+          join(Answer).\
+          join(User).\
+          filter(Task.tally < app.config['TASK_COMPLETED_TALLY']).\
+          filter(User.id != user_id).\
+          limit(app.config['TASKS_PER_USER'])
+  print str(tasks)
   for task in tasks:
     surveys = Survey.query.filter_by(task_id=task.id)
     for survey in surveys:

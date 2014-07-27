@@ -1,7 +1,9 @@
-flask>=0.10
-flask-sqlalchemy
+flask>=0.10.1
+flask-sqlalchemy>=1.0
+flask-restless
+flask-scripts
 sqlalchemy>=0.8
 python-dateutil>2.0
 mimerender>=0.5.2
-hashlib
-uuid
+hashlib>=20081119
+uuid>=1.30

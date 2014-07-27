@@ -5,9 +5,6 @@ setup(
     version="0.1",
     packages=find_packages(),
     scripts = ['scripts/runserver.py'],
-    package_data = { 
-        'flaskenberg': ['static', 'templates'], 
-    },
     zip_safe=False,
     install_requires=['Flask'],
 )

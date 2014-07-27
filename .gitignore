@@ -1,3 +1,4 @@
+build
 venv
 db
 flaskenberg/static/bower_components
