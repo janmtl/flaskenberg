@@ -19,6 +19,7 @@ class Task(db.Model):
   hash_id     = db.Column(db.Unicode, unique=True)
   title       = db.Column(db.Unicode)
   content     = db.Column(db.Unicode)
+  max_tally   = db.Column(db.Integer)
   questions   = association_proxy('survey', 'question')
 
 class Question(db.Model):
@@ -42,12 +43,3 @@ class Answer(db.Model):
   user        = db.relationship(User,     backref='answer')
   task        = db.relationship(Task,     backref='answer')
   question    = db.relationship(Question, backref='answer')
-
-class Survey(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  task_id     = db.Column(db.Integer, db.ForeignKey('task.id'))
-  question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-  tally       = db.Column(db.Integer)
-  max_tally   = db.Column(db.Integer)
-  task        = db.relationship(Task,     backref='survey')
-  question    = db.relationship(Question, backref='survey')

@@ -1,5 +1,5 @@
 from flaskenberg import app, db
-from flaskenberg.models import User, Task, Question, Choice, Answer, Survey
+from flaskenberg.models import User, Task, Question, Choice, Answer
 
 import flask.ext.sqlalchemy
 from sqlalchemy.sql import and_, func
@@ -15,41 +15,36 @@ def new_user(data=None, **kw):
   data['tally'] = 0
   pass
 
-# NEW PROBLEM, I'M REASSIGNING THE SAME USER TO THE SAME TASKS
-
-def assign_tasks(result=None, **kw):
-  user_id = result['id']
-  tasks = Task.query.\
-          join(Answer).\
-          join(User).\
-          filter(Task.tally < app.config['TASK_COMPLETED_TALLY']).\
-          filter(User.id != user_id).\
-          limit(app.config['TASKS_PER_USER'])
-  print str(tasks)
-  for task in tasks:
-    surveys = Survey.query.filter_by(task_id=task.id)
-    for survey in surveys:
-      new_task = Answer(user_id = user_id, task_id = task.id, question_id = survey.question_id)
-      db.session.add(new_task)
-  db.session.commit()
-  pass
-
-def tally_task_and_user(result=None, **kw):
-  task = Task.query.filter_by(id = result['task_id']).first()
-  user = User.query.filter_by(id = result['user_id']).first()
-
-  num_answers   = Answer.query.filter(and_(and_(Answer.user_id==result['user_id'], Answer.value!=None), Answer.task_id==result['task_id'])).count()
-  num_questions = len(task.questions)
-  print num_answers
-  print num_questions
-
-  if (num_answers == num_questions):
-    task.tally = task.tally + 1
-    user.tally = user.tally + 1
-    db.session.commit();
-  elif (num_answers > num_questions):
-    print 'overcomplete task'
-  pass
+#def assign_tasks(result=None, **kw):
+#  user_id = result['id']
+#  stmt    = Answer.query.filter_by(user_id = 2).with_entities(Answer.task_id, Answer.question_id).subquery()
+#  surveys = Survey.query.\
+#            join(stmt, and_(Survey.task_id != stmt.c.task_id, Survey.question_id != stmt.c.question_id)).\
+#            filter(Survey.tally < Survey.max_tally).\
+#            limit(app.config['TASKS_PER_USER'])
+#
+#  for survey in surveys:
+#    new_answer = Answer(user_id = user_id, task_id = survey.task_id, question_id = survey.question_id)
+#    db.session.add(new_answer)
+#  db.session.commit()
+#  pass
+#
+#def tally_survey_and_user(result=None, **kw):
+#  survey = Survey.query.filter_by(task_id = result['task_id'], question_id = result['quesiton_id']).first()
+#  user   = User.query.filter_by(id = result['user_id']).first()
+#
+#  num_answers   = Answer.query.filter(and_(and_(Answer.user_id==result['user_id'], Answer.value!=None), Answer.task_id==result['task_id'])).count()
+#  num_questions = len(task.questions)
+#  print num_answers
+#  print num_questions
+#
+#  if (num_answers == num_questions):
+#    task.tally = task.tally + 1
+#    user.tally = user.tally + 1
+#    db.session.commit();
+#  elif (num_answers > num_questions):
+#    print 'overcomplete task'
+#  pass
 
 # Create the database tables.
 db.create_all()
@@ -60,8 +55,8 @@ manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
 # Create API endpoints, which will be available at /api/<tablename>
 manager.create_api(User,      methods=['GET', 'POST', 'PATCH'], 
                               include_columns=['id', 'hash_id', 'tally'], 
-                              preprocessors={'POST': [new_user]}, 
-                              postprocessors={'POST': [assign_tasks]})
+                              preprocessors={'POST': [new_user]}) 
+                              #postprocessors={'POST': [assign_tasks]})
 
 manager.create_api(Task,      methods=['GET'], 
                               include_columns=['id', 'hash_id', 'title', 'content'])
@@ -72,8 +67,8 @@ manager.create_api(Question,  methods=['GET'],
 manager.create_api(Choice,    methods=['GET'])
 
 manager.create_api(Answer,    methods=['GET', 'PUT', 'PATCH'], 
-                              include_columns=['id', 'user_id', 'task_id', 'question_id', 'value'],
-                              postprocessors={'PUT_SINGLE': [tally_task_and_user]})
+                              include_columns=['id', 'user_id', 'task_id', 'question_id', 'value'])
+                              #postprocessors={'PUT_SINGLE': [tally_task_and_user]})
 
 @app.route('/')
 def root():

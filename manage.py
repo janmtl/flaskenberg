@@ -1,5 +1,6 @@
 from flask.ext.script import Manager
 from flaskenberg import app, db
+import os
 
 manager = Manager(app)
 

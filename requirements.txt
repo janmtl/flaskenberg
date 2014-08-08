@@ -1,7 +1,7 @@
 flask>=0.10.1
 flask-sqlalchemy>=1.0
 flask-restless
-flask-scripts
+flask-script
 sqlalchemy>=0.8
 python-dateutil>2.0
 mimerender>=0.5.2
