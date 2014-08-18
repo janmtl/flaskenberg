@@ -6,6 +6,7 @@ manager = Manager(app)
 
 @manager.command
 def populate():
+  "Populates the database with seed data for testing"
   db.metadata.drop_all(db.engine)
   db.create_all()
   seed = open(os.path.join(os.path.abspath(os.curdir), 'db/data.sql'))

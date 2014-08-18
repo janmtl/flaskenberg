@@ -12,15 +12,15 @@ class User(db.Model):
   gender      = db.Column(db.Unicode)
   age         = db.Column(db.Integer)
   tally       = db.Column(db.Integer)
-  tasks       = association_proxy('answer', 'task')
 
 class Task(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   hash_id     = db.Column(db.Unicode, unique=True)
   title       = db.Column(db.Unicode)
   content     = db.Column(db.Unicode)
-  max_tally   = db.Column(db.Integer)
-  questions   = association_proxy('survey', 'question')
+  repetitions = db.Column(db.Integer)
+  task2answer = db.relationship('Answer', primaryjoin="and_(Task.id==Answer.task_id, Answer.user_id==0)", uselist=True)
+  questions   = association_proxy('task2answer', 'question')
 
 class Question(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -40,6 +40,16 @@ class Answer(db.Model):
   value       = db.Column(db.Unicode)
   timestamp   = db.Column(db.Unicode)
   ip_address  = db.Column(db.Unicode)
-  user        = db.relationship(User,     backref='answer')
-  task        = db.relationship(Task,     backref='answer')
-  question    = db.relationship(Question, backref='answer')
+  user        = db.relationship(User)
+  task        = db.relationship(Task)
+  question    = db.relationship(Question)
+
+  @property
+  def serialize(self):
+     return {
+         'id'          : self.id,
+         'user_id'     : self.user_id,
+         'task_id'     : self.task_id,
+         'question_id' : self.question_id,
+         'value'       : self.value
+     }

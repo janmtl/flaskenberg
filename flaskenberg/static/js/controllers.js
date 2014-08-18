@@ -9,17 +9,23 @@ flaskenbergControllers.controller('SurveyCtrl', ['$scope', 'User', 'Task', 'Ques
 
     var next_question = function(){
       //Get the next question
-      User.next({userId: Session.get_user_id()}, function(res){
-        $scope.answer   = Answer.get({answerId: res.answer_id});
-        $scope.task     = Task.get({taskId: res.task_id});
-        $scope.question = Question.get({questionId: res.question_id});
+      User.next({userId: Session.get_user().id}, function(res){
+        $scope.answers  = res.objects;
+        $scope.task     = Task.get({taskId: res.task_id}, function(res){
+          $scope.questions = [];
+          angular.forEach(res.questions, function(question, index){
+            $scope.questions[index] = Question.get({questionId: question.id});
+          });
+        });
       });
       $scope.$emit('next_question');
     };
     
     //Submit
     $scope.submit = function(){
-      Answer.save($scope.answer);
+      angular.forEach($scope.answers, function(answer){
+        Answer.save(answer);
+      });
       next_question();
     };
 
@@ -43,7 +49,7 @@ flaskenbergControllers.controller('UserCtrl', ['$scope', '$location', 'User', 'S
     $scope.submit = function(){
       var new_user = new User($scope.user)
       new_user.$save(function(u){
-        Session.set_user_id(u.id);
+        Session.set_user(u);
         $location.path('/survey');
       });
     }
@@ -51,7 +57,7 @@ flaskenbergControllers.controller('UserCtrl', ['$scope', '$location', 'User', 'S
     //Controller startup
     var init = function(){
       if ($location.path() === '/survey') {
-        $scope.user = User.get({userId: Session.get_user_id()});
+        $scope.user = User.get({userId: Session.get_user().id});
         $scope.showUser = true;
       } else {
         $scope.showUser = false;

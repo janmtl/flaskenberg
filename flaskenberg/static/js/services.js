@@ -1,7 +1,7 @@
 'use strict';
 
 /* Services */
-var flaskenbergServices = angular.module('flaskenbergServices', ['ngResource']);
+var flaskenbergServices = angular.module('flaskenbergServices', ['ngResource', 'LocalStorageModule']);
  
 flaskenbergServices.factory('User', ['$resource', function ($resource){
     return $resource(
@@ -63,15 +63,17 @@ flaskenbergServices.factory('Answer', ['$resource', function ($resource){
     );
   }]);
 
-flaskenbergServices.factory('Session', ['User', function(User){
-    var session = {user_id: null};
-
+flaskenbergServices.factory('Session', ['User', 'localStorageService', function(User, localStorageService){
     return {
-      get_user_id: function(){
-        return session.user_id;
+      get_user: function(){
+        return {
+          id:      localStorageService.get('user_id'),
+          hash_id: localStorageService.get('user_hash_id'),
+        };
       },
-      set_user_id: function(user_id){
-        session.user_id = user_id;
+      set_user: function(user){
+        if (user.id){      localStorageService.set('user_id', user.id); }
+        if (user.hash_id){ localStorageService.set('user_hash_id', user.hash_id); }
       }
     }
   }]);
