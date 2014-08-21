@@ -3,7 +3,7 @@
 /* Services */
 var flaskenbergServices = angular.module('flaskenbergServices', ['ngResource', 'LocalStorageModule']);
  
-flaskenbergServices.factory('User', ['$resource', function ($resource){
+flaskenbergServices.factory('User', ['$resource', 'Session', function ($resource, Session){
     return $resource(
       'api/user/:userId', 
       {userId: '@id'},
@@ -11,6 +11,11 @@ flaskenbergServices.factory('User', ['$resource', function ($resource){
         'query': {
           isArray: true,
           transformResponse: function (data){ return angular.fromJson(data)["objects"]; }
+        },
+        'get': {
+          transformResponse: function (data){
+            return {id: angular.fromJson(data).id, tally: angular.fromJson(data).tally, hash_id: Session.get_user().hash_id};
+          }
         },
         'next': {
           method: 'GET',
@@ -63,12 +68,12 @@ flaskenbergServices.factory('Answer', ['$resource', function ($resource){
     );
   }]);
 
-flaskenbergServices.factory('Session', ['User', 'localStorageService', function(User, localStorageService){
+flaskenbergServices.factory('Session', ['localStorageService', function(localStorageService){
     return {
       get_user: function(){
         return {
           id:      localStorageService.get('user_id'),
-          hash_id: localStorageService.get('user_hash_id'),
+          hash_id: localStorageService.get('user_hash_id')
         };
       },
       set_user: function(user){

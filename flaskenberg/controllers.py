@@ -15,6 +15,12 @@ def new_user(data=None, **kw):
   data['tally'] = 0
   pass
 
+def notify_hash_id(result=None, **kw):
+  user = User.query.filter_by(id = result['id']).first()
+  result['hash_id'] = user.hash_id
+  print result
+  pass
+
 def assign_task(result=None, **kw):
   user_id = result['id']
 
@@ -76,12 +82,12 @@ manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
 
 # Create API endpoints, which will be available at /api/<tablename>
 manager.create_api(User,      methods=['GET', 'POST', 'PATCH'], 
-                              include_columns=['id', 'hash_id', 'tally'], 
+                              include_columns=['id', 'tally'], 
                               preprocessors={'POST': [new_user]},
-                              postprocessors={'POST': [assign_task]})
+                              postprocessors={'POST': [assign_task, notify_hash_id]})
 
 manager.create_api(Task,      methods=['GET'], 
-                              include_columns=['id', 'hash_id', 'title', 'content', 'questions'])
+                              include_columns=['id', 'title', 'content', 'questions'])
 
 manager.create_api(Question,  methods=['GET'], 
                               include_columns=['id', 'title', 'choices'])

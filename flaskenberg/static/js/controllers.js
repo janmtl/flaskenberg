@@ -57,8 +57,8 @@ flaskenbergControllers.controller('UserCtrl', ['$scope', '$location', 'User', 'S
     //Controller startup
     var init = function(){
       if ($location.path() === '/survey') {
-        $scope.user = User.get({userId: Session.get_user().id});
-        $scope.showUser = true;
+        $scope.user         = User.get({userId: Session.get_user().id});
+        $scope.showUser     = true;
       } else {
         $scope.showUser = false;
       }
